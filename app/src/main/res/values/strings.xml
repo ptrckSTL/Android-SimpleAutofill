@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AutoFillDemo</string>
+    <string name="my_autofill_manager">My Autofill Manager</string>
+</resources>
