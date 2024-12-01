@@ -1,7 +1,7 @@
-package dev.android.autofilldemo
+package dev.amirraza.autofill
 
-import dev.android.autofilldemo.db.AutofillDataDao
-import dev.android.autofilldemo.db.AutofillDataSet
+import dev.amirraza.autofill.db.AutofillDataDao
+import dev.amirraza.autofill.db.AutofillDataSet
 
 class AutofillRepository(private val autofillDataDao: AutofillDataDao) {
 

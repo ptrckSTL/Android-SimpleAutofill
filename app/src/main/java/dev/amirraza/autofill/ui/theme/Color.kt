@@ -1,4 +1,4 @@
-package dev.android.autofilldemo.ui.theme
+package dev.amirraza.autofill.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

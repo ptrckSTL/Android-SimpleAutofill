@@ -1,4 +1,4 @@
-package dev.android.autofilldemo
+package dev.amirraza.autofill
 
 object Constants {
     const val DB_NAME = "autofill_database"

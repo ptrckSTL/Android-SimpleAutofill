@@ -1,8 +1,8 @@
-package dev.android.autofilldemo.db
+package dev.amirraza.autofill.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.android.autofilldemo.Constants.DB_TABLE_NAME
+import dev.amirraza.autofill.Constants.DB_TABLE_NAME
 
 @Entity(tableName = DB_TABLE_NAME)
 data class AutofillDataSet(

@@ -1,4 +1,4 @@
-package dev.android.autofilldemo
+package dev.amirraza.autofill
 
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +8,12 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import dev.android.autofilldemo.Constants.EXTRA_IDENTIFIER
-import dev.android.autofilldemo.db.AutofillDataDao
-import dev.android.autofilldemo.db.AutofillDataSet
-import dev.android.autofilldemo.db.AutofillDatabase
-import dev.android.autofilldemo.util.Util
-import dev.android.autofilldemo.util.VaultListAdapter
+import dev.amirraza.autofill.Constants.EXTRA_IDENTIFIER
+import dev.amirraza.autofill.db.AutofillDataDao
+import dev.amirraza.autofill.db.AutofillDataSet
+import dev.amirraza.autofill.db.AutofillDatabase
+import dev.amirraza.autofill.util.Util
+import dev.amirraza.autofill.util.VaultListAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

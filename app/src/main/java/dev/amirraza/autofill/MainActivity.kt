@@ -1,4 +1,4 @@
-package dev.android.autofilldemo
+package dev.amirraza.autofill
 
 import android.content.Context
 import android.content.Intent
@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.android.autofilldemo.ui.theme.AutoFillDemoTheme
-import dev.android.autofilldemo.util.Util
+import dev.amirraza.autofill.ui.theme.AutoFillDemoTheme
+import dev.amirraza.autofill.util.Util
 
 class MainActivity : ComponentActivity() {
 

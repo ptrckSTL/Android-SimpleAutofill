@@ -1,4 +1,4 @@
-package dev.android.autofilldemo.model
+package dev.amirraza.autofill.model
 
 import android.view.autofill.AutofillId
 

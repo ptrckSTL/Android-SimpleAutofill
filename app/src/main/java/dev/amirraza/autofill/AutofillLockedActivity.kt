@@ -1,4 +1,4 @@
-package dev.android.autofilldemo
+package dev.amirraza.autofill
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import dev.android.autofilldemo.Constants.EXTRA_IDENTIFIER
+import dev.amirraza.autofill.Constants.EXTRA_IDENTIFIER
 
 class AutofillLockedActivity : ComponentActivity() {
 

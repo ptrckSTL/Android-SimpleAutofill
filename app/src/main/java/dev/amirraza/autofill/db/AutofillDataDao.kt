@@ -1,10 +1,10 @@
-package dev.android.autofilldemo.db
+package dev.amirraza.autofill.db
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import dev.android.autofilldemo.Constants.DB_TABLE_NAME
+import dev.amirraza.autofill.Constants.DB_TABLE_NAME
 
 @Dao
 interface AutofillDataDao {

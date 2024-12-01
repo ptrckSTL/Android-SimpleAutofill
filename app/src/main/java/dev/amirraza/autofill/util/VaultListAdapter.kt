@@ -1,4 +1,4 @@
-package dev.android.autofilldemo.util
+package dev.amirraza.autofill.util
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import dev.android.autofilldemo.R
-import dev.android.autofilldemo.db.AutofillDataSet
+import dev.amirraza.autofill.R
+import dev.amirraza.autofill.db.AutofillDataSet
 
 class VaultListAdapter(private val context: Context, private val data: List<AutofillDataSet>) :
     BaseAdapter() {

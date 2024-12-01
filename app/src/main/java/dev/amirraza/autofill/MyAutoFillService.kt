@@ -1,4 +1,4 @@
-package dev.android.autofilldemo
+package dev.amirraza.autofill
 
 import android.app.PendingIntent
 import android.app.assist.AssistStructure
@@ -19,9 +19,9 @@ import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
-import dev.android.autofilldemo.Constants.EXTRA_IDENTIFIER
-import dev.android.autofilldemo.db.AutofillDatabase
-import dev.android.autofilldemo.model.ParsedStructure
+import dev.amirraza.autofill.Constants.EXTRA_IDENTIFIER
+import dev.amirraza.autofill.db.AutofillDatabase
+import dev.amirraza.autofill.model.ParsedStructure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

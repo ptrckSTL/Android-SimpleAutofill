@@ -4,12 +4,16 @@ plugins {
     id("kotlin-kapt")
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
-    namespace = "dev.android.autofilldemo"
+    namespace = "dev.amirraza.autofill"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "dev.android.autofilldemo"
+        applicationId = "dev.amirraza.autofill.android"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -29,13 +33,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true

@@ -1,4 +1,4 @@
-package dev.android.autofilldemo.util
+package dev.amirraza.autofill.util
 
 import android.app.Activity
 import android.content.Context
@@ -8,7 +8,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
-import dev.android.autofilldemo.Constants.REQUEST_CODE_AUTOFILL_SERVICE
+import dev.amirraza.autofill.Constants.REQUEST_CODE_AUTOFILL_SERVICE
 
 object Util {
 

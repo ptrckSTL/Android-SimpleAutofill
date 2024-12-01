@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="dev.android.autofilldemo">
+    package="dev.amirraza.autofill">
 
     <application
         android:allowBackup="true"
@@ -11,12 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AutoFillDemo"
+        android:theme="@style/Theme.AutoFill"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.AutoFillDemo">
+            android:theme="@style/Theme.AutoFill">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,13 +24,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AutoFillEntriesActivity" android:exported="false" android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".AutofillLockedActivity"/>
+        <activity
+            android:name=".AutoFillEntriesActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".AutofillLockedActivity" />
 
         <service
             android:name=".MyAutoFillService"
-            android:label="My Autofill Service Demo"
             android:exported="true"
+            android:label="@string/app_name"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
