@@ -16,7 +16,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.AutoFillDemo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,11 +24,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AutoFillSaveActivity"/>
+        <activity android:name=".AutoFillEntriesActivity" android:exported="false" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".AutofillLockedActivity"/>
 
         <service
-            android:name=".AutoFillServiceDemo"
+            android:name=".MyAutoFillService"
             android:label="My Autofill Service Demo"
             android:exported="true"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">

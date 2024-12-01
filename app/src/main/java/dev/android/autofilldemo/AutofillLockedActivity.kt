@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import dev.android.autofilldemo.Constants.EXTRA_IDENTIFIER
 
 class AutofillLockedActivity : ComponentActivity() {
 
@@ -22,8 +23,8 @@ class AutofillLockedActivity : ComponentActivity() {
 
             if (unlocked) {
                 Toast.makeText(this, "Vault Unlocked!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, AutoFillSaveActivity::class.java).apply {
-                    putExtra("componentPkg", intent?.getStringExtra("componentPkg"))
+                startActivity(Intent(this, AutoFillEntriesActivity::class.java).apply {
+                    putExtra(EXTRA_IDENTIFIER, intent?.getStringExtra(EXTRA_IDENTIFIER))
                 })
                 finish()
             } else {

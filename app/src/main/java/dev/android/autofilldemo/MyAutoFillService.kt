@@ -2,10 +2,8 @@ package dev.android.autofilldemo
 
 import android.app.PendingIntent
 import android.app.assist.AssistStructure
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.CancellationSignal
 import android.service.autofill.AutofillService
@@ -18,10 +16,10 @@ import android.service.autofill.SaveRequest
 import android.util.Log
 import android.view.View
 import android.view.autofill.AutofillId
-import android.view.autofill.AutofillManager.EXTRA_ASSIST_STRUCTURE
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
+import dev.android.autofilldemo.Constants.EXTRA_IDENTIFIER
 import dev.android.autofilldemo.db.AutofillDatabase
 import dev.android.autofilldemo.model.ParsedStructure
 import kotlinx.coroutines.CoroutineScope
@@ -29,8 +27,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class AutoFillServiceDemo : AutofillService(), CoroutineScope {
-    private val tag = AutoFillServiceDemo::class.java.simpleName
+class MyAutoFillService : AutofillService(), CoroutineScope {
+    private val tag = MyAutoFillService::class.java.simpleName
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
@@ -41,7 +39,7 @@ class AutoFillServiceDemo : AutofillService(), CoroutineScope {
         callback: FillCallback
     ) {
         try {
-            val serviceContext = this@AutoFillServiceDemo
+            val serviceContext = this@MyAutoFillService
             launch {
                 // Get the structure of the activity requesting autofill
                 val structure = request.fillContexts.last().structure
@@ -51,6 +49,11 @@ class AutoFillServiceDemo : AutofillService(), CoroutineScope {
 
                 val parsedStructure: ParsedStructure = traverseStructure(structure)
                 Log.d(tag, "parsed data: $parsedStructure")
+                if (parsedStructure.identifier.isNullOrEmpty()) {
+                    parsedStructure.identifier = componentPkg
+                }
+
+                val identifier: String = parsedStructure.identifier ?: componentPkg
 
                 if (checkIfPasswordManagerAppIsLocked()) {
                     if (parsedStructure.usernameId == null)
@@ -68,7 +71,7 @@ class AutoFillServiceDemo : AutofillService(), CoroutineScope {
                     }
 
                     val intent = Intent(serviceContext, AutofillLockedActivity::class.java).apply {
-                        putExtra("componentPkg", componentPkg)
+                        putExtra(EXTRA_IDENTIFIER, identifier)
                     }
 
                     val pendingIntent = PendingIntent.getActivity(
@@ -100,9 +103,9 @@ class AutoFillServiceDemo : AutofillService(), CoroutineScope {
                 }
 
                 val databaseDao =
-                    AutofillDatabase.getDatabase(this@AutoFillServiceDemo).autofillDataDao()
-                val allRecords = databaseDao.getAllRecordsByIdentifier(componentPkg)
-                Log.d(tag, "allRecords for $componentPkg: ${allRecords.size}")
+                    AutofillDatabase.getDatabase(this@MyAutoFillService).autofillDataDao()
+                val allRecords = databaseDao.getAllRecordsByIdentifier(identifier)
+                Log.d(tag, "allRecords for $identifier: ${allRecords.size}")
 
                 if (allRecords.isNotEmpty()) {
                     val datasetList = arrayListOf<Dataset>()
@@ -143,7 +146,7 @@ class AutoFillServiceDemo : AutofillService(), CoroutineScope {
                         val addNewSet = Dataset.Builder().setValue(
                             usernameAutofillId,
                             AutofillValue.forText(""),
-                            addNewRemoteView(serviceContext, componentPkg)
+                            addNewRemoteView(serviceContext, identifier)
                         )
 
                         datasetList.add(addNewSet.build())
@@ -167,7 +170,7 @@ class AutoFillServiceDemo : AutofillService(), CoroutineScope {
                                 Dataset.Builder().setValue(
                                     usernameAutofillId,
                                     AutofillValue.forText(""),
-                                    getDefaultRemoteView(serviceContext, componentPkg)
+                                    getDefaultRemoteView(serviceContext, identifier)
                                 ).build()
                             )
                             .build()
@@ -243,19 +246,54 @@ class AutoFillServiceDemo : AutofillService(), CoroutineScope {
         parsedStructure: ParsedStructure
     ) {
         val clazz = viewNode?.className
-        if (clazz != null && (clazz.contains("EditText") || clazz.contains("AutoCompleteTextView"))) {
-            if (viewNode.autofillHints.isNullOrEmpty().not()) {
-                viewNode.autofillHints?.forEach { item ->
-                    buildParsedStructure(item, viewNode.autofillId, parsedStructure)
+        if (clazz != null) {
+            if (clazz.contains("EditText") || clazz.contains("AutoCompleteTextView")) {
+                if (viewNode.webDomain.isNullOrEmpty()
+                        .not() && parsedStructure.identifier.isNullOrEmpty()
+                ) {
+                    parsedStructure.identifier = viewNode.webDomain
                 }
-            } else if (viewNode.hint != null) {
-                buildParsedStructure(viewNode.hint!!, viewNode.autofillId, parsedStructure)
-            } else {
-                if(clazz.contains("EditText")) {
-                    buildParsedStructure("username", viewNode.autofillId, parsedStructure)
+
+                if (viewNode.autofillHints.isNullOrEmpty().not()) {
+                    viewNode.autofillHints?.forEach { item ->
+                        Log.d(
+                            "MyAutoFill",
+                            "autofillHints=${viewNode.autofillHints?.size} > item = $item > viewNode.autofillId = ${viewNode.autofillId}"
+                        )
+                        if (item != null) {
+                            buildParsedStructure(item, viewNode.autofillId, parsedStructure)
+                        }
+                    }
+                } else if (viewNode.hint != null) {
+                    buildParsedStructure(viewNode.hint!!, viewNode.autofillId, parsedStructure)
+                } else {
+                    if (clazz.contains("EditText") && parsedStructure.usernameId == null) {
+                        buildParsedStructure("username", viewNode.autofillId, parsedStructure)
+                    }
                 }
+                Log.d("MyAutoFill", "parsed EditText data : $parsedStructure")
+            } else if (clazz.contains("TextView") &&
+                viewNode.idEntry == "url_bar" &&
+                viewNode.webDomain.isNullOrEmpty().not() &&
+                parsedStructure.identifier.isNullOrEmpty()
+            ) {
+                Log.d("MyAutoFill", "InApp browser domain address : ${viewNode.webDomain}")
+                parsedStructure.identifier = viewNode.webDomain
             }
-            Log.d("MyAutoFill", "parsed EditText data : $parsedStructure")
+        } else {
+            if (viewNode?.autofillHints.isNullOrEmpty().not()) {
+                viewNode?.autofillHints?.forEach { item ->
+                    Log.d(
+                        "MyAutoFill",
+                        "autofillHints=${viewNode.autofillHints?.size} > item = $item > viewNode.autofillId = ${viewNode.autofillId}"
+                    )
+                    if (item != null) {
+                        buildParsedStructure(item, viewNode.autofillId, parsedStructure)
+                    }
+                }
+            } else if (viewNode?.hint != null) {
+                buildParsedStructure(viewNode.hint!!, viewNode.autofillId, parsedStructure)
+            }
         }
     }
 
@@ -269,36 +307,43 @@ class AutoFillServiceDemo : AutofillService(), CoroutineScope {
         } else if (View.AUTOFILL_HINT_USERNAME.equals(hint, ignoreCase = true) ||
             View.AUTOFILL_HINT_PHONE.equals(hint, ignoreCase = true) ||
             View.AUTOFILL_HINT_EMAIL_ADDRESS.equals(hint, ignoreCase = true) ||
-            "email".equals(hint, ignoreCase = true)
+            "id".equals(hint, ignoreCase = true) ||
+            "login".equals(hint, ignoreCase = true) ||
+            "email".equals(hint, ignoreCase = true) ||
+            hint.contains("email", ignoreCase = true) ||
+            hint.contains("mobile", ignoreCase = true) ||
+            hint.contains("number", ignoreCase = true)
         ) {
             parsedStructure.usernameId = autofillId
-        } else if (View.AUTOFILL_HINT_PASSWORD.equals(hint, ignoreCase = true)) {
+        } else if (View.AUTOFILL_HINT_PASSWORD.equals(hint, ignoreCase = true) ||
+            hint.contains(View.AUTOFILL_HINT_PASSWORD, ignoreCase = true)
+        ) {
             parsedStructure.passwordId = autofillId
         }
     }
 
-    private fun getDefaultRemoteView(serviceContext: Context, componentPkg: String) =
+    private fun getDefaultRemoteView(serviceContext: Context, identifier: String) =
         RemoteViews(serviceContext.packageName, R.layout.autofill_default_remote_view).apply {
             setOnClickPendingIntent(
                 R.id.defaultRemoteViewLL,
                 PendingIntent.getActivity(
                     serviceContext, 0,
-                    Intent(serviceContext, AutoFillSaveActivity::class.java).apply {
-                        putExtra("componentPkg", componentPkg)
+                    Intent(serviceContext, AutoFillEntriesActivity::class.java).apply {
+                        putExtra(EXTRA_IDENTIFIER, identifier)
                     },
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
             )
         }
 
-    private fun addNewRemoteView(serviceContext: Context, componentPkg: String) =
+    private fun addNewRemoteView(serviceContext: Context, identifier: String) =
         RemoteViews(serviceContext.packageName, R.layout.autofill_add_new_remote_view).apply {
             setOnClickPendingIntent(
                 R.id.addNewVaultViewLL,
                 PendingIntent.getActivity(
                     serviceContext, 0,
-                    Intent(serviceContext, AutoFillSaveActivity::class.java).apply {
-                        putExtra("componentPkg", componentPkg)
+                    Intent(serviceContext, AutoFillEntriesActivity::class.java).apply {
+                        putExtra(EXTRA_IDENTIFIER, identifier)
                     },
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )

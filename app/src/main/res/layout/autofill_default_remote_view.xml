@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/defaultRemoteViewLL"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/defaultRemoteViewLL"
     android:background="@color/white"
+    android:clickable="true"
     android:gravity="center_vertical"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:background="@color/gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_lock_lock"/>
+            android:src="@android:drawable/ic_lock_lock" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/my_autofill_manager"
+            android:text="MyPwdManager"
             android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
-    <!-- Action Section -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Go to vault"
-        android:textSize="12sp"
-        android:padding="8dp"
-        android:gravity="center"
         android:background="@color/white"
+        android:focusable="false"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Go to vault"
         android:textColor="@color/black"
-        android:clickable="true"
-        android:focusable="true" />
+        android:textSize="12sp" />
 
 </LinearLayout>
