@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <autofill-service
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:settingsActivity="dev.amirraza.autofill.AutoFillEntriesActivity">
-
+    android:supportsInlineSuggestions="true">
 
     <!-- well-known browswers, alphabetical order -->
     <compatibility-package
