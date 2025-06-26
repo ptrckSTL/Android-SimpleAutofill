@@ -1,32 +1,33 @@
-# **Description**
+# Android Simple Autofill Demo
 
-This is a sample project for **Android's Autofill Framework**. This project is compatible with parsing native applications, in-app browsers and external browsers. However, some external browser still having challenges in parsing content.
+A minimal Android autofill service implementation for reproducing and testing browser autofill
+issues.
 
-## **Requirements**
+## Requirements
 
-Project built with:
-- Android Studio: **Koala**
-- Gradle: **8.7**
-- AGP: **8.5.2**
-- Kotlin: **1.9.0**
-- Java: **17**
-- Min SDK: **26**
-- Compile SDK: **34**
+- **Android Studio**: Narwhal
+- **AGP**: 8.10.0
+- **Kotlin**: 2.1.0
+- **Java**: 17
+- **Min SDK**: 30
+- **Target SDK**: 36
 
-## Project Explanation
+## Purpose
 
-- [auto_fill_service.xml](https://github.com/amirraza/Android-AutofillFramework/blob/main/app/src/main/res/xml/auto_fill_service.xml)
-  - Defines the autofill service settings activity
-    
-- [ParsedStructure.kt](https://github.com/amirraza/Android-AutofillFramework/blob/main/app/src/main/java/dev/amirraza/autofill/model/ParsedStructure.kt)
-  - A model class used to keep the [AutofillId](https://developer.android.com/reference/android/view/autofill/AutofillId) that used to fill the fields.
-    - ParsedStructure class has [identifier](https://github.com/amirraza/Android-AutofillFramework/blob/51f47a27564d36b9fc95952acebedf096adba67a/app/src/main/java/dev/amirraza/autofill/model/ParsedStructure.kt#L9) that is used to insert records uniquely into db(Room) and used to show the specific Autofill hints when visiting client's applications/browsers
-      
-- [MyAutoFillService.kt](https://github.com/amirraza/Android-AutofillFramework/blob/main/app/src/main/java/dev/amirraza/autofill/MyAutoFillService.kt)
-  - The autofill service uses to parse the client's applications (native apps or browsers) and extract the [AutofillId](https://developer.android.com/reference/android/view/autofill/AutofillId) for name, username, password fields and keep their references to **ParsedStructure**
- 
-- [AutofillLockedActivity.kt](https://github.com/amirraza/Android-AutofillFramework/blob/main/app/src/main/java/dev/amirraza/autofill/AutofillLockedActivity.kt)
-  - This is a mocked master password activity, that will be used to show the locked Autofill hints. This will cover the scenario where the autofill hint won't show if the password manager application is locked.
+This project serves as a minimal reproduction case for testing autofill behavior across different
+browsers and applications. It implements a basic autofill service that fills form fields with test
+data to help identify and debug autofill-related issues.
 
+## Key Components
 
+- **MyAutoFillService.kt** - Main autofill service implementation
+- **auto_fill_service.xml** - Service configuration and metadata
+- Simple UI for enabling/configuring the autofill service
 
+## Setup
+
+1. Clone the repository
+2. Open in Android Studio Narwhal
+3. Build and install on device/emulator
+4. Go to Settings > System > Languages & input > Autofill service
+5. Select "Simple Autofill Demo" as your autofill service

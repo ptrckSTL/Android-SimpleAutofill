@@ -1,4 +1,4 @@
-package dev.amirraza.autofill.ui.theme
+package com.ptrckstl.demofill.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
