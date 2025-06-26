@@ -2,6 +2,7 @@ package com.ptrckstl.demofill
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.CancellationSignal
 import android.service.autofill.AutofillService
@@ -18,7 +19,8 @@ import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import androidx.autofill.inline.v1.InlineSuggestionUi
 
-class AutofillDemoService : AutofillService() {
+class AutofillDemoService : AutofillService(), InlinePreference {
+    override val context: Context = this
     private val tag = AutofillDemoService::class.java.simpleName
 
     override fun onFillRequest(
@@ -64,19 +66,20 @@ class AutofillDemoService : AutofillService() {
                     )
                 }
 
-                val inlinePresentation = createInlinePresentation(request)
+                val inlinePresentation =
+                    if (preferInline) createInlinePresentation(request) else null
                 if (inlinePresentation != null) {
+                    Log.d(tag, "using inline presentation")
                     @Suppress("DEPRECATION") // new api requires minSDK >= 33
                     datasetBuilder.setInlinePresentation(inlinePresentation)
-                    Log.d(tag, "Added inline presentation")
                 } else {
-                    Log.d(tag, "Using fallback RemoteViews presentation")
+                    Log.d(tag, "using RemoteView presentation")
                 }
-
                 val fillResponse = FillResponse.Builder()
                     .addDataset(datasetBuilder.build())
                     .build()
 
+                Log.d(tag, "Fulfilling autofill callback!")
                 callback.onSuccess(fillResponse)
             } else {
                 Log.d(tag, "No autofill fields found")
