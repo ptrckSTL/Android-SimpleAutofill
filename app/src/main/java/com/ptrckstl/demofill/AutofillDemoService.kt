@@ -52,7 +52,10 @@ class AutofillDemoService : AutofillService(), InlinePreference {
 
             if (autofillIds.isNotEmpty()) {
                 // Create a fallback remote view for regular autofill
-                val remoteView = RemoteViews(packageName, android.R.layout.simple_list_item_1)
+                val remoteView =
+                    RemoteViews(packageName, android.R.layout.simple_list_item_1).apply {
+                        setTextColor(android.R.id.text1, android.graphics.Color.BLACK)
+                    }
                 remoteView.setTextViewText(android.R.id.text1, "Test")
 
                 val datasetBuilder = Dataset.Builder()
