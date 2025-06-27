@@ -1,20 +1,28 @@
 package com.ptrckstl.demofill
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import androidx.core.content.edit
-import com.ptrckstl.demofill.InlinePreference.Companion.PREFER_INLINE
+import com.ptrckstl.demofill.InlinePreference.Companion.PREFER_INLINE_FILE
+import java.io.File
 
+// We don't use shared preferences because main activity and autofill service will desync
 interface InlinePreference {
     val context: Context
 
     companion object {
-        const val PREFER_INLINE = "InlinePreference.prefer_inline"
+        const val PREFER_INLINE_FILE = "prefer_inline.txt"
     }
 }
 
-private fun getPrefs(context: Context) = context.getSharedPreferences("prefs", MODE_PRIVATE)
+private fun getPreferenceFile(context: Context) = File(context.filesDir, PREFER_INLINE_FILE)
 
 var InlinePreference.preferInline: Boolean
-    get() = getPrefs(context).getBoolean(PREFER_INLINE, true)
-    set(value) = getPrefs(context).edit(commit = true) { putBoolean(PREFER_INLINE, value) }
+    get() {
+        val file = getPreferenceFile(context)
+        return if (!file.exists()) {
+            getPreferenceFile(context).writeText("true")
+            true
+        } else file.readText().toBoolean()
+    }
+    set(value) {
+        getPreferenceFile(context).writeText(value.toString())
+    }
